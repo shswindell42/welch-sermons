@@ -16,20 +16,39 @@ computervision_client = ComputerVisionClient(endpoint, CognitiveServicesCredenti
 
 
 # Read files 
-sample_file_path = "/home/spencer/Documents/welch-bible-lessons/memorials-1.png"
+img_path = "/home/spencer/Documents/welch-bible-lessons"
+all_files = os.listdir(img_path)
+img_files = [f for f in all_files if f.endswith(".png")]
+processed_files = [f.replace(".txt", ".png") for f in all_files if f.endswith(".txt")]
 
-img_data = open(sample_file_path, 'rb')
+files_to_process = list(set(img_files) - set(processed_files))
 
-response = computervision_client.read_in_stream(image=img_data, raw=True, )
-operation_id = response.headers["Operation-Location"].split("/")[-1]
+print(f"Found {files_to_process} to process")
 
-while True:
-    read_result = computervision_client.get_read_result(operation_id)
-    if read_result.status not in ['notStarted', 'running']:
-        break
-    time.sleep(1)
+for file in files_to_process:
+    file = os.path.join(img_path, file)
+    print(file)
+    text_file_name = file.replace(".png", ".txt")
 
-if read_result.status == OperationStatusCodes.succeeded:
-    for text_result in read_result.analyze_result.read_results:
-        for line in text_result.lines:
-            print(line.text)
+    img_data = open(file, 'rb')
+
+    response = computervision_client.read_in_stream(image=img_data, raw=True, )
+    operation_id = response.headers["Operation-Location"].split("/")[-1]
+
+    while True:
+        read_result = computervision_client.get_read_result(operation_id)
+        if read_result.status not in ['notStarted', 'running']:
+            break
+        time.sleep(1)
+
+    if read_result.status == OperationStatusCodes.succeeded:
+        with open(text_file_name, 'w') as text_file:
+            for text_result in read_result.analyze_result.read_results:
+                for line in text_result.lines:
+                    text_file.write(line.text)
+                    text_file.write("\n")
+
+    img_data.close()
+
+    time.sleep(15) # throttle so we don't get an error from Azure
+    
