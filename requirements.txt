@@ -1,2 +1,4 @@
 azure-cognitiveservices-vision-computervision
 pillow
+sentence-transformers
+flask

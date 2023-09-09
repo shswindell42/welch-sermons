@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>{{ post["title"] }}</h1>
+{% endblock %}
+
+{% block content %}
+
+<div style="white-space: pre-wrap;">
+    {{ post["content"] }}
+</div>
+
+{% endblock %}
