@@ -1,6 +1,6 @@
 import os
 from azure.cognitiveservices.vision.computervision import ComputerVisionClient
-from azure.cognitiveservices.vision.computervision.models import OperationStatusCodes, VisualFeatureTypes
+from azure.cognitiveservices.vision.computervision.models import OperationStatusCodes, VisualFeatureTypes, ComputerVisionOcrErrorException
 from msrest.authentication import CognitiveServicesCredentials
 
 from array import array
@@ -23,16 +23,15 @@ processed_files = [f.replace(".txt", ".png") for f in all_files if f.endswith(".
 
 files_to_process = list(set(img_files) - set(processed_files))
 
-print(f"Found {files_to_process} to process")
+print(f"Found {len(files_to_process)} to process")
 
 for file in files_to_process:
     file = os.path.join(img_path, file)
     print(file)
     text_file_name = file.replace(".png", ".txt")
 
-    img_data = open(file, 'rb')
-
-    response = computervision_client.read_in_stream(image=img_data, raw=True, )
+    with open(file, 'rb') as img_data:
+        response = computervision_client.read_in_stream(image=img_data, raw=True, )
     operation_id = response.headers["Operation-Location"].split("/")[-1]
 
     while True:
@@ -47,8 +46,3 @@ for file in files_to_process:
                 for line in text_result.lines:
                     text_file.write(line.text)
                     text_file.write("\n")
-
-    img_data.close()
-
-    time.sleep(15) # throttle so we don't get an error from Azure
-    
