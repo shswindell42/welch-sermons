@@ -5,16 +5,11 @@ Welch Sermons
 {% endblock %}
 
 {% block header %}
-    <h1>Search</h1>
+    <h1>Search Results</h1>
+
 {% endblock %}
 
 {% block content %}
-
-
-    <form method="post">
-        <input name="query" type="text" id="query" />
-        <input type="submit" value="Search" />
-    </form>
 
     {% for r in results %}
 

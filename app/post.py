@@ -11,7 +11,7 @@ def search():
     results = []
 
     if request.method == "POST":
-        results = query(request.args.get("query"))
+        results = query(request.form["query"])
 
     return render_template('post/search.html', results=results)
     
