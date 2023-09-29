@@ -1,6 +1,8 @@
 import os
 from sentence_transformers import SentenceTransformer
 import pinecone
+import requests
+import urllib.parse
 
 path = "data/lessons"
 
@@ -32,4 +34,25 @@ def query(query):
             "meta": m["metadata"]["text"]
         }
         for m in results["matches"]
+    ]
+
+
+def query_solr(query):
+    # format the request
+    url_query = urllib.parse.quote_plus(f"content:{query}")
+    url = f"http://localhost:8983/solr/sermons/select?q={url_query}"
+
+    results = requests.get(url=url)
+
+    if results.status_code == 200:
+        docs = results.json()["response"]["docs"]
+    else:
+        docs = [{"title": "", "content": results.text}]
+
+    return [
+        {
+            "title": d["title"],
+            "meta": d["content"][0:100]
+        }
+        for d in docs
     ]

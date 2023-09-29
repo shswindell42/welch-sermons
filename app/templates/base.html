@@ -7,6 +7,10 @@
         <ul class="nav navbar-nav">
             <li>
                 <form method="post" class="navbar-form" action="/">
+                    <select type="dropdown" name="serchType">
+                        <option value="semantic">Semantic</option>
+                        <option value="heuristic">Heuristic</option>
+                    </select>
                     <input name="query" type="text" id="query" />
                     <input type="submit" value="Search" />
                 </form>
