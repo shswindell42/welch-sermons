@@ -3,6 +3,5 @@
 .env
 .vscode
 .terraform
-/data
 /embedding
 */__pycache__
