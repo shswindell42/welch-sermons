@@ -9,7 +9,7 @@ path = "data/lessons"
 _model = SentenceTransformer("all-MiniLM-L6-v2")
 
 _api_key = os.environ.get("PINECONE_API_KEY")
-_env = os.environ.get("PINECODE_ENV")
+_env = os.environ.get("PINECONE_ENV")
 pinecone.init(api_key=_api_key, environment=_env)
 search_index = pinecone.Index("sermons")
 

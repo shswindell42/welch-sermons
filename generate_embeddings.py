@@ -10,7 +10,7 @@ model = SentenceTransformer('all-MiniLM-L6-v2')
 
 
 api_key = os.environ.get("PINECONE_API_KEY")
-env = os.environ.get("PINECODE_ENV")
+env = os.environ.get("PINECONE_ENV")
 pinecone.init(api_key=api_key, environment=env)
 pinecone_index = pinecone.Index("sermons")
 

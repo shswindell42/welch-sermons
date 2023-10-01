@@ -3,7 +3,7 @@ import os
 from sentence_transformers import SentenceTransformer
 
 api_key = os.environ.get("PINECONE_API_KEY")
-env = os.environ.get("PINECODE_ENV")
+env = os.environ.get("PINECONE_ENV")
 pinecone.init(api_key=api_key, environment=env)
 index = pinecone.Index("sermons")
 
